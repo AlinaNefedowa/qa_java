@@ -1,44 +1,34 @@
-import com.example.Animal;
+package com.example;
+
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.api.Assertions;
 
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class AnimalParameterizedTest {
-    package com.example;
 
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.ValueSource;
+    Animal animal = new Animal();
 
-import java.util.List;
+    @ParameterizedTest
+    @CsvSource({
+            "Хищник,Животные|Птицы|Рыба",
+            "Травоядное,Трава|Различные растения"
+    })
+    void testGetFoodWithValidAnimalKinds(String kind, String expectedItems) throws Exception {
+        List<String> expected = List.of(expectedItems.split("\\|"));
+        List<String> actual = animal.getFood(kind);
+        Assertions.assertEquals(expected, actual);
+    }
 
-import static org.junit.jupiter.api.Assertions.*;
-
-    public class AnimalParameterizedTest {
-
-        private final Animal animal = new Animal();
-
-        @ParameterizedTest
-        @CsvSource({
-                "Хищник, 'Животные,Птицы,Рыба'",
-                "Травоядное, 'Трава,Различные растения'"
-        })
-        void getFoodReturnsCorrectListForValidAnimalKind(String kind, String expectedCsv) throws Exception {
-            List<String> expected = List.of(expectedCsv.split(","));
-            List<String> result = animal.getFood(kind);
-            assertEquals(expected, result);
-        }
-
-        @ParameterizedTest
-        @ValueSource(strings = {"Всеядное", "", "Unknown"})
-        void getFoodThrowsExceptionForInvalidAnimalKind(String invalidKind) {
-            Exception exception = assertThrows(Exception.class, () -> animal.getFood(invalidKind));
-            assertEquals("Неизвестный вид животного, используйте значение Травоядное или Хищник", exception.getMessage());
-        }
+    @ParameterizedTest
+    @ValueSource(strings = {"Всеядное", "", "Неизвестно"})
+    void testGetFoodWithInvalidAnimalKinds(String kind) {
+        Exception exception = Assertions.assertThrows(Exception.class, () -> animal.getFood(kind));
+        Assertions.assertEquals(
+                "Неизвестный вид животного, используйте значение Травоядное или Хищник",
+                exception.getMessage()
+        );
     }
 }
