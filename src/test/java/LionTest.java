@@ -1,25 +1,24 @@
-package com.example;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.List;
 
+import com.example.Feline;
+import com.example.Lion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.Mockito;
 
 class LionTest {
 
-    private FelineInterface felineMock;
+    private Feline felineMock;
     private Lion lion;
 
     @BeforeEach
     void setUp() throws Exception {
-        felineMock = Mockito.mock(FelineInterface.class);
+        felineMock = mock(Feline.class);
         lion = new Lion("Самец", felineMock);
     }
 
@@ -59,5 +58,3 @@ class LionTest {
     }
 
 }
-
-

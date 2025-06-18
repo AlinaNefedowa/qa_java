@@ -1,5 +1,5 @@
-package com.example;
-
+import com.example.Feline;
+import com.example.Lion;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -18,22 +18,22 @@ public class LionParameterizedTest {
             "Самка,false"
     })
     void doesHaveManeReturnsExpectedForValidSex(String sex, boolean expectedHasMane) throws Exception {
-        FelineInterface felineMock = mock(FelineInterface.class);
-        Lion lion = new Lion(sex, felineMock);
+        Feline felineSpy = spy(new Feline());
+        Lion lion = new Lion(sex, felineSpy);
         assertEquals(expectedHasMane, lion.doesHaveMane());
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"", "неизвестно", "123"})
     void constructorThrowsExceptionOnInvalidSex(String invalidSex) {
-        FelineInterface felineMock = mock(FelineInterface.class);
-        Exception exception = assertThrows(Exception.class, () -> new Lion(invalidSex, felineMock));
+        Feline felineSpy = spy(new Feline());
+        Exception exception = assertThrows(Exception.class, () -> new Lion(invalidSex, felineSpy));
         assertEquals("Используйте допустимые значения пола животного - самец или самка", exception.getMessage());
     }
 
     @Test
     void getKittensDelegatesToFeline() throws Exception {
-        FelineInterface felineMock = mock(FelineInterface.class);
+        Feline felineMock = mock(Feline.class);
         when(felineMock.getKittens()).thenReturn(5);
 
         Lion lion = new Lion("Самец", felineMock);
@@ -44,7 +44,7 @@ public class LionParameterizedTest {
 
     @Test
     void getFoodReturnsExpectedList() throws Exception {
-        FelineInterface felineMock = mock(FelineInterface.class);
+        Feline felineMock = mock(Feline.class);
         List<String> foodList = List.of("Животные", "Птицы");
         when(felineMock.getFood("Хищник")).thenReturn(foodList);
 
